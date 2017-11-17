@@ -1,0 +1,415 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <meta name="viewport" content="initial-scale=1.0">
+</head>
+ <body>
+    <div id="logo">
+    <img src="img/logo@2x.png" alt="" width="240" height="50"/>
+</div>
+     <div id="map"></div>
+   <script>
+    var map;
+    
+    var markers = [];
+       
+     function initMap() {
+          // Create a styles array to use with the map.
+        var styles = [
+              {
+                "elementType": "labels",
+                "stylers": [
+                  {
+                    "saturation": "-50"
+                  }
+                ]
+              },
+              {
+                "featureType": "landscape",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi",
+                "elementType": "labels",
+                "stylers": [
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi.attraction",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi.business",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi.government",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "poi.sport_complex",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "road",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "road",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                  {
+                    "visibility": "off"
+                  }
+                ]
+              },
+              {
+                "featureType": "road.arterial",
+                "elementType": "labels.icon",
+                "stylers": [
+                  {
+                    "visibility": "off"
+                  }
+                ]
+              },
+              {
+                "featureType": "road.highway",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "road.highway",
+                "elementType": "labels",
+                "stylers": [
+                  {
+                    "visibility": "off"
+                  }
+                ]
+              },
+              {
+                "featureType": "road.local",
+                "elementType": "labels.icon",
+                "stylers": [
+                  {
+                    "visibility": "off"
+                  }
+                ]
+              },
+              {
+                "featureType": "transit",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "transit.station",
+                "elementType": "geometry.fill",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              },
+              {
+                "featureType": "water",
+                "elementType": "geometry",
+                "stylers": [
+                  {
+                    "hue": "#15B28A"
+                  },
+                  {
+                    "saturation": "-50"
+                  },
+                  {
+                    "lightness": "5"
+                  },
+                  {
+                    "visibility": "on"
+                  }
+                ]
+              }
+            ];
+         
+         map = new google.maps.Map(document.getElementById('map'), {
+             center: {lat: 31.7158758, lng:-11.5789643},
+             zoom: 6,
+             styles: styles,
+             mapTypeControl: false,
+             streetViewControl: false
+         });
+         
+         //liste des musées gérés par la fondation nationale
+         var museumIcon = {
+             url : 'img/pinpoint_museum.png',
+             scaledSize : new google.maps.Size(40,40),
+             origin : new google.maps.Point(0,0),
+             anchor : new google.maps.Point(20,35)
+         };
+         
+         var clusterStyle = [{
+        url : 'img/m1.png',
+        height: 50,
+        width: 50,
+        //anchor: [25, 25],
+        textColor: '#ffffff',
+        textSize: 12}];
+         
+          var options = {
+              gridSize:13,
+              styles : clusterStyle,
+              imagePath: 'img/m'};
+         
+         var locations =[
+                    {   title: '<h3>Musée la Kasbah des cultures méditerranéennes</h3>',
+                        location: {lat : 35.7884052, lng: -5.8126964}, 
+                        content: '<p>Le Musée la Kasbah des cultures méditerranéennes représente un lieu patrimonial  incontournable et une partie importante de la mémoire collective méditerranéenne. Il compte également parmi les plus anciennes institutions culturelles témoignant de la richesse et de la diversité du bassin méditerranéen. <br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 10h00 à 18h00. <br><br><b>Tarifs d’entrée :</b> 20 dhs (adultes) – 10 dhs (enfants) – 5 dhs (moins de 12 ans) <br><br><i>Vendredi : gratuit pour les nationaux et les résidents étrangers au Maroc</i></p>'
+                    },
+                    {   title: '<h3>Musée ethnographique de Tétouan</h3>',
+                        location: {lat : 35.5703375, lng: -5.3635828},
+                        content: '<p>Inauguré le 29 juillet 1948, le Musée ethnographique de Tétouan est niché sur une forteresse historique construite sur ordre du sultan alaouite Moulay Abderrahmane vers 1830. A travers ses collections, le musée ethnographique de Tétouan illustre certains aspects culturels et ethnographiques de la ville et sa région, à travers deux thématiques principales: « vie publique » au rez-de-chaussée, et « vie privée » à l’étage. <br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 9h00 à 16h00. <br><br><b>Tarifs d’entrée :</b> 10 dhs (adultes) – 3 dhs (enfants)<br><br><i>Vendredi : gratuit pour les nationaux</i></p>'
+                    },
+                    {   title: '<h3>Musée archeologique de Tétouan</h3>',
+                        location: {lat : 35.5707167, lng: -5.3706519},
+                        content: '<p>Inauguré le 19 juillet 1940, le Musée archéologique de Tétouan est situé en plein centre-ville, à quelques rues de la pittoresque Médina, classée patrimoine mondial de l’humanité en 1997. Les collections du Musée archéologique de Tétouan sont liées à celle des recherches archéologiques de la région. En effet, la majorité des vestiges et objets exposés proviennent de fouilles entreprises dans le nord du Maroc à partir des années 1930. <br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 9h00 à 16h00. <br><br><b>Tarifs d’entrée :</b> 10 dhs (adultes) – 3 dhs (enfants)<br><br><i>Vendredi : gratuit pour les nationaux</i></p>'
+                    },
+                    {   title: '<h3>Musée Mohammed VI d’art moderne et contemporain</h3>',
+                        location: {lat : 34.0151436, lng: -6.8329167},
+                        content: '<p>Inauguré par S.M le Roi Mohammed VI en octobre 2014, le Musée Mohammed VI d’art moderne et contemporain (MMVI) est la première institution muséale dans le Royaume à se consacrer entièrement aux arts moderne et contemporain, et également la première institution publique à répondre aux normes muséographiques internationales. <br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 10h00 à 18h00. <br><br><b>Tarifs d’entrée :</b> 40 dhs (adultes) – 20 dhs (enfants) - 5 dhs (moins de 12 ans) <br><br><i>Vendredi : gratuit pour les nationaux et les résidents au Maroc</i></p>'
+                    },
+                    {   title: '<h3>Musée national de l’histoire et des civilisations</h3>',
+                        location: {lat : 34.0137416, lng: -6.830897},
+                        content: '<p>L’histoire des collections du musée commence en 1915 avec le lancement d’une série de fouilles archéologiques sous le Protectorat français, à l’initiative du fameux général Lyautey.  Les plus célèbres et les plus riches de ces fouilles furent celles du site romain de Volubilis, placées sous la direction de Louis Chatelain. Les découvertes nombreuses d’objets exceptionnels nécessitèrent l’organisation d’un service des Antiquités, qui fut créé officiellement en 1918. <br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 10h00 à 18h00. <br><br><b>Tarifs d’entrée :</b> 20 dhs (adultes) – 10 dhs (enfants) - 10 dhs (moins de 14 ans et groupes) <br><br><i>Vendredi : gratuit pour les nationaux et les résidents au Maroc<br>réduction de 50% pour les étudiants</i></p>'
+                    },
+                    {   title: '<h3>Musée national des bijoux</h3>',
+                        location: {lat : 34.0316038, lng: -6.8355741},
+                        content: '<p><i><b>Musée fermé pour rénovation</b><br><br>Depuis 2014, le Musée national des bijoux, comme 13 autres musées marocains, a été confié à la Fondation nationale des musées. Dans le cadre de sa stratégie de rénovation des musées, la Fondation Nationale des Musées (FNM) a élaboré un projet de restauration et de réhabilitation du musée national des bijoux qui nécessite sa fermeture temporaire.</i>'
+                    },
+                    {   title: '<h3>Musée Al Batha de Fès</h3>',
+                        location: {lat : 34.0593971, lng: -4.9817419},
+                        content: '<p>A l’origine, le Musée Al Batha est un palais d’audience et une résidence estivale, construite à la fin du 19ème siècle par le Sultan Moulay Hassan Ier. Son successeur, Moulay Abdelaziz, va compléter et embellir cet édifice, de style arabo-andalou. En 1915, le palais est transformé en Musée des arts et traditions populaires, et quelques années plus tard, en 1924, il est classé comme monument du patrimoine national. Actuellement, le Musée abrite une exposition permanente archéologique et ethnographique, reflétant les arts et les traditions de la capitale spirituelle du Maroc. Le Musée conserve également les plus anciennes pièces d’art islamique du royaume, comme la poutre Idrisside et le minbar de la Mosquée du quartier des Andalous.<br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 9h00 à 16h00. <br><br><b>Tarifs d’entrée :</b> 10 dhs (adultes) – 3 dhs (enfants) <br><br><i>Vendredi : gratuit pour les nationaux</i></p>'
+                    },
+                    {   title: '<h3>Musée Dar Jamaï</h3>',
+                        location: {lat : 33.8932662, lng: -5.56583},
+                        content: '<p>Le Musée Dar Jamaï est à l’origine une résidence privée construite en 1882. De type hispano-mauresque, ce majestueux palais constitue un spécimen des demeures des “familles du makhzen” marocaines de la fin du 19ème siècle. Appartenant à Mohamed Ben Larbi Jamaï, grand vizir du Sultan Moulay Hassan 1er (1873 – 1894), cette vaste demeure a fini par être vendue au Glaoui de Marrakech, qui ne vint jamais y habiter. En 1912, les Français récupèrent la bâtisse, mais non pas pour y faire un musée. Ils aménagent un hôpital militaire dans sa partie centrale.<br>Ce n’est qu’en 1920 que le bâtiment est attribué dans sa totalité à l’Inspection régionale des Beaux-Arts qui le transforme en Musée, avec une importante galerie d’artisanat.<br>Depuis, Dar Jamaï est classé monument historique, et la majeure partie de sa collection est constituée d’objets datant du 19ème et du 20ème siècle.<br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 9h00 à 16h00. <br><br><b>Tarifs d’entrée :</b> 10 dhs (adultes) – 3 dhs (enfants) <br><br><i>Vendredi : gratuit pour les nationaux</i></p>'
+                    },
+                    {   title: '<h3>Musée Borj Bel Kari</h3>',
+                        location: {lat : 33.8937072, lng: -5.5665359},
+                        content: '<p>Le Musée Borj Bel Kari, consacré à la poterie du Rif et du Pré-Rif, a ouvert ses portes en 2004. Le Musée tient son nom de Borj Bel Kari, bastion alaouite dans lequel il est situé, qui fait partie de la célèbre muraille Ismaélienne construite par le Sultan Moulay Ismail (1672-1727) qui a eu un rôle important dans le système défensif de la ville. Vu son importance historique et architecturale, le bastion de Borj Bel Kari a été classé monument historique dès 1932.<br>Le Musée abrite une très importante collection de poterie du Rif et du Pré-Rif, constituée en 2003 grâce à des échanges entre d’autres musées et des acquisitions auprès d’ateliers de poterie. <br>La collection permanente est composée de poteries préhistoriques, antiques et islamiques, venues des quatre coins du royaume.<br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 9h00 à 16h00. <br><br><b>Tarifs d’entrée :</b> 10 dhs (adultes) – 3 dhs (enfants) <br><br><i>Vendredi : gratuit pour les nationaux</i></p>'
+                    },
+                    {   title: '<h3>Musée Dar El Bacha de Marrakech</h3>',
+                        location: {lat : 31.6233474, lng: -7.9840286},
+                        content: '<p><i><b>Musée fermé pour rénovation</b><br><br>Depuis 2014, le Musée Dar El Bacha de Marrakech, comme 13 autres musées marocains, a été confié à la Fondation nationale des musées. Dans le cadre de sa stratégie de rénovation des musées, la Fondation Nationale des Musées (FNM) a élaboré un projet de restauration et de réhabilitation du musée Dar El Bacha qui nécessite sa fermeture temporaire.</i>'
+                    },
+                    {   title: '<h3>Musée Dar si Saïd de Marrakech</h3>',
+                        location: {lat : 31.6224128, lng: -7.9841305},
+                        content: '<p>Le palais de Dar Si Said fut édifié au cours de la seconde moitié du XIXème siècle par le ministre de la guerre Si Saïd B. Moussa.  En 1930, sous le Protectorat français le palais est transformé en musée des Arts Indigènes, et accueille également des ateliers d’artisans faisant démonstration de leurs techniques traditionnelles.<br>Après l’indépendance, les locaux de Dar Si Saïd furent répartis entre le service de l’artisanat et le musée. Ce dernier occupe la moitié du palais,  notamment le grand Riad avec ses quatre salles, le petit Riad, deux étages et  de nombreuses annexes. Cette partie du palais présente une architecture typique du XIXème siècle marocain, et constitue un très beau témoignage de cette époque architecturale, tant par sa structure que par son décor.<br><br><b>Horaires d\’ouvertures :</b> Toute la semaine, sauf le mardi, de 9h00 à 16h00. <br><br><b>Tarifs d’entrée :</b> 10 dhs (adultes) – 3 dhs (enfants) <br><br><i>Vendredi : gratuit pour les nationaux</i></p>'
+                    },
+                    {   title: '<h3>Musée national de la céramique</h3>',
+                        location: {lat : 32.2973794, lng: -9.2441502},
+                        content: '<p><i><b>Musée fermé pour rénovation</b><br><br>Depuis 2014, le Musée national de la céramique de Safi, comme 13 autres musées marocains, a été confié à la Fondation nationale des musées. Dans le cadre de sa stratégie de rénovation des musées, la Fondation Nationale des Musées (FNM) a élaboré un projet de restauration et de réhabilitation du musée national de Safi qui nécessite sa fermeture temporaire.</i>'
+                    },
+                    {   title: '<h3>Musée des arts sahariens de Laâyoune</h3>',
+                        location: {lat : 27.1525354, lng: -13.2061203},
+                        content: '<p><i><b>Musée fermé pour rénovation</b><br><br>Depuis 2014, le Musée des arts sahariens de Laâyoune, comme 13 autres musées marocains, a été confié à la Fondation nationale des musées. Dans le cadre de sa stratégie de rénovation des musées, la Fondation Nationale des Musées (FNM) a élaboré un projet de restauration et de réhabilitation du musée de Laâyoune qui nécessite sa fermeture temporaire.</i>'
+                    }
+                ];
+         
+        var largeInfoWindow = new google.maps.InfoWindow({maxWidth: '300'});
+        var bounds = new google.maps.LatLngBounds();
+        // The following group uses the location array to create an array of markers on initialize.
+        for (var i = 0; i < locations.length; i++) {
+          // Get the position from the location array.
+          var position = locations[i].location;
+          var title = locations[i].title;
+          var content = locations[i].content;
+          // Create a marker per location, and put into markers array.
+          var marker = new google.maps.Marker({
+            map: map,
+            position: position,
+            title: title,
+            icon: museumIcon,
+            content: content,
+            animation: google.maps.Animation.DROP,
+            id: i
+          });
+          // Push the marker to our array of markers.
+          
+        markers.push(marker);
+        
+       
+       
+          // Create an onclick event to open an infowindow at each marker.
+          marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfoWindow);
+          });
+          bounds.extend(markers[i].position);
+        }
+        // Extend the boundaries of the map for each marker
+        map.fitBounds(bounds);
+      var markerCluster = new MarkerClusterer(map, markers, options); 
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('logo'));
+     }
+      // This function populates the infowindow when the marker is clicked. We'll only allow
+      // one infowindow which will open at the marker that is clicked, and populate based
+      // on that markers position.
+      function populateInfoWindow(marker, infowindow) {
+        // Check to make sure the infowindow is not already opened on this marker.
+        if (infowindow.marker != marker) {
+          infowindow.marker = marker;
+          infowindow.setContent('<div>' + marker.title + '</div>'
+                                +'<div>' + marker.content +'<div>');
+          infowindow.open(map, marker);
+          // Make sure the marker property is cleared if the infowindow is closed.
+          infowindow.addListener('closeclick',function(){
+            infowindow.setMarker = null;
+          });
+        }
+      }
+    
+
+     
+   </script>
+     <script src="js/markerclusterer.js"></script>
+   <script async defer
+           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRNlltzPm9G7CqFx4ou7zGR_FS9Cv7fnY&v=3&region=MA&callback=initMap">
+   </script>
+ </body>
+</html>
